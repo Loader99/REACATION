@@ -1,5 +1,5 @@
 import asyncio
-from telegram import Update
+from telegram import Update, ReactionTypeEmoji
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 import os
 
@@ -9,7 +9,7 @@ if not TOKEN:
     raise ValueError("BOT_TOKEN not found. Please set it in Railway variables.")
 
 MAX_REACTIONS = 40
-EMOJI_LIST = ["🔥","❤️","👍","⚡","💎","🚀","😍","👏","👿","😎"]
+EMOJI_LIST = ["🔥","❤️","👍","⚡","💎","🚀","😍","👏","😎"]
 
 async def on_startup(app):
     print("Hello Alone Bot is Active 🔥")
@@ -21,18 +21,16 @@ async def add_reactions(update: Update, context: ContextTypes.DEFAULT_TYPE):
     while total < MAX_REACTIONS:
         await asyncio.sleep(120)
 
-        for _ in range(2):
-            if total >= MAX_REACTIONS:
-                return
-            try:
-        #        await context.bot.set_message_reaction(
-                    chat_id=message.chat_id,
-                    message_id=message.message_id,
-                    reaction=[EMOJI_LIST[total % len(EMOJI_LIST)]]
-                )
-                total += 1
-            except Exception as e:
-                print(e)
+        try:
+            await context.bot.set_message_reaction(
+                chat_id=message.chat_id,
+                message_id=message.message_id,
+                reaction=[ReactionTypeEmoji(EMOJI_LIST[total % len(EMOJI_LIST)])]
+            )
+            total += 1
+        except Exception as e:
+            print(e)
+            return
 
 app = ApplicationBuilder().token(TOKEN).post_init(on_startup).build()
 

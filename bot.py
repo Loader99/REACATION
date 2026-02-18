@@ -25,7 +25,7 @@ async def add_reactions(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if total >= MAX_REACTIONS:
                 return
             try:
-                await context.bot.set_message_reaction(
+        #        await context.bot.set_message_reaction(
                     chat_id=message.chat_id,
                     message_id=message.message_id,
                     reaction=[EMOJI_LIST[total % len(EMOJI_LIST)]]
